@@ -93,6 +93,35 @@ const Owner = User.discriminator(
   })
 );
 
+const Affiliate = User.discriminator(
+  "Affiliate",
+  new Schema(
+    {
+      posts: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Post",
+        },
+      ],
+      looks: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Look",
+        },
+      ],
+    },
+    {
+      toJSON: {
+        virtuals: true,
+      },
+    }
+  )
+);
+
 // TODO virtuals
+// get product count
+// get campaign count
+// get post count
+// get look count
 
 module.exports = { Owner, Affiliate };
