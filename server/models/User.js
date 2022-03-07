@@ -72,7 +72,27 @@ const Owner = User.discriminator(
       required: [true, "Brand Name is required!"],
       trim: true,
     },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    campaigns: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Campaign",
+      },
+    ],
+    affiliates: [
+      {
+        type: ObjectID,
+        ref: "Affiliate",
+      },
+    ],
   })
 );
 
 // TODO virtuals
+
+module.exports = { Owner, Affiliate };
