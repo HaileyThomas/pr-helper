@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const { hash, compare } = require("bcrypt");
-const { ObjectID } = require("bson");
 
 const options = { discriminatorKey: "kind" };
 
