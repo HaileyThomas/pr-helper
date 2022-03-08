@@ -29,6 +29,23 @@ const typeDefs = gql`
     posts: [Post]
     looks: [Look]
   }
+  type SocialMedia {
+      _id: ID!
+      type: MediaTypes
+      userName: String!
+      link: String!
+  }
+  enum MediaTypes {
+      FACEBOOK
+      INSTAGRAM
+      TWITTER
+      TIKTOK
+      YOUTUBE
+      OTHER
+  }
+  type Products {
+      
+  }
 `;
 
 module.exports = typeDefs;
