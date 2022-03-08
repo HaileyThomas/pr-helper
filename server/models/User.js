@@ -47,7 +47,8 @@ const userSchema = new Schema(
     toJSON: {
       virtuals: true,
     },
-  }
+  },
+  options
 );
 
 // middleware for password
@@ -66,31 +67,39 @@ userSchema.methods.isCorrectPassword = async function (password) {
 
 const Owner = User.discriminator(
   "Owner",
-  new Schema({
-    brandName: {
-      type: String,
-      required: [true, "Brand Name is required!"],
-      trim: true,
+  new Schema(
+    {
+      brandName: {
+        type: String,
+        required: [true, "Brand Name is required!"],
+        trim: true,
+      },
+      products: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+        },
+      ],
+      campaigns: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Campaign",
+        },
+      ],
+      affiliates: [
+        {
+          type: ObjectID,
+          ref: "Affiliate",
+        },
+      ],
     },
-    products: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
+    {
+      toJSON: {
+        virtuals: true,
       },
-    ],
-    campaigns: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Campaign",
-      },
-    ],
-    affiliates: [
-      {
-        type: ObjectID,
-        ref: "Affiliate",
-      },
-    ],
-  })
+    },
+    options
+  )
 );
 
 const Affiliate = User.discriminator(
@@ -114,14 +123,27 @@ const Affiliate = User.discriminator(
       toJSON: {
         virtuals: true,
       },
-    }
+    },
+    options
   )
 );
 
 // TODO virtuals
 // get product count
+Owner.virtual("productCount").get(function () {
+  return this.product.length;
+});
 // get campaign count
+Owner.virtual("campaignCount").get(function () {
+  return this.campaign.length;
+});
 // get post count
+Affiliate.virtual("postCount").get(function () {
+  return this.post.length;
+});
 // get look count
+Affiliate.virtual("lookCount").get(function () {
+  return this.look.length;
+});
 
 module.exports = { Owner, Affiliate };
