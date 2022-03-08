@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const socialMediaSchema = new Schema({
   type: {
     type: String,
-    enum: ["", ""],
+    enum: ["FACEBOOK", "INSTAGRAM", "TWITTER", "TIKTOK", "YOUTUBE", "OTHER"],
     trim: true,
     default: "OTHER",
   },
