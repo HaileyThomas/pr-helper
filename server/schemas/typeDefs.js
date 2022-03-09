@@ -59,6 +59,26 @@ const typeDefs = gql`
     image: String
     product: Product
   }
+  type Campaign {
+    _id: ID!
+    title: String!
+    description: String!
+    image: String
+    posts: [Post]
+  }
+  type Post {
+    _id: ID!
+    title: String!
+    description: String
+    link: String
+  }
+  type Look {
+    _id: ID!
+    title: String!
+    description: String
+    image: String
+    link: String
+  }
 `;
 
 module.exports = typeDefs;
