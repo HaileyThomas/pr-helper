@@ -28,6 +28,7 @@ const typeDefs = gql`
     socials: [SocialMedia]
     posts: [Post]
     looks: [Look]
+    brands: [Owner]
   }
   type SocialMedia {
       _id: ID!
@@ -43,8 +44,13 @@ const typeDefs = gql`
       YOUTUBE
       OTHER
   }
-  type Products {
-      
+  type Product {
+    _id: ID!
+    name: String!
+    description: String
+    link: String
+    ads: [Ad]
+    looks: [Look]
   }
 `;
 

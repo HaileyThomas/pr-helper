@@ -117,6 +117,12 @@ const Affiliate = User.discriminator(
           ref: "Look",
         },
       ],
+      brands: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Owner",
+        },
+      ],
     },
     {
       toJSON: {
