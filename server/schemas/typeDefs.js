@@ -17,7 +17,6 @@ const typeDefs = gql`
     brand: Brand
     products: [Product]
     campaigns: [Campaign]
-    affiliates: [Affiliate]
   }
   type Affiliate {
     _id: ID!
@@ -85,11 +84,10 @@ const typeDefs = gql`
   }
   type Auth {
       token: ID!
-      owner: Owner
-      affiliate: Affiliate
+      user: User
   }
   type Query {
-      me: Owner
+      me: User
   }
   type Mutation {
       addOwner(newOwner: ): Auth
