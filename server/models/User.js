@@ -1,8 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { hash, compare } = require("bcrypt");
 
-const options = { discriminatorKey: "kind" };
-
 const userSchema = new Schema(
   {
     firstName: {
@@ -26,6 +24,11 @@ const userSchema = new Schema(
       minlength: 5,
       maxlength: 50,
     },
+    role: {
+      type: String,
+      enum: ["OWNER", "AFFILIATE"],
+      trim: true,
+    },
     avatar: {
       type: String,
       trim: true,
@@ -40,7 +43,6 @@ const userSchema = new Schema(
         ref: "SocialMedia",
       },
     ],
-    profile: { type: ObjectID, refPath: "role" },
   },
   {
     toJSON: {
@@ -64,91 +66,6 @@ userSchema.methods.isCorrectPassword = async function (password) {
   return compare(password, this.password);
 };
 
-const Owner = User.discriminator(
-  "Owner",
-  new Schema(
-    {
-      brandName: {
-        type: String,
-        required: [true, "Brand Name is required!"],
-        trim: true,
-      },
-      products: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Product",
-        },
-      ],
-      campaigns: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Campaign",
-        },
-      ],
-      affiliates: [
-        {
-          type: ObjectID,
-          ref: "Affiliate",
-        },
-      ],
-    },
-    {
-      toJSON: {
-        virtuals: true,
-      },
-    },
-    options
-  )
-);
+const User = model("User", userSchema);
 
-const Affiliate = User.discriminator(
-  "Affiliate",
-  new Schema(
-    {
-      posts: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Post",
-        },
-      ],
-      looks: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Look",
-        },
-      ],
-      brands: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Owner",
-        },
-      ],
-    },
-    {
-      toJSON: {
-        virtuals: true,
-      },
-    },
-    options
-  )
-);
-
-// TODO virtuals
-// get product count
-Owner.virtual("productCount").get(function () {
-  return this.product.length;
-});
-// get campaign count
-Owner.virtual("campaignCount").get(function () {
-  return this.campaign.length;
-});
-// get post count
-Affiliate.virtual("postCount").get(function () {
-  return this.post.length;
-});
-// get look count
-Affiliate.virtual("lookCount").get(function () {
-  return this.look.length;
-});
-
-module.exports = { Owner, Affiliate };
+module.exports = User;

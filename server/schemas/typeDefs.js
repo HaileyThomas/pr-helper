@@ -1,34 +1,38 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  type Owner {
+  type User {
     _id: ID!
-    type: UserType
     firstName: String!
     lastName: String!
     email: String!
     password: String!
+    role: String!
     avatar: String
     website: String
     socials: [SocialMedia]
-    brandName: String!
+  }
+  type Owner {
+    _id: ID!
+    brand: Brand
     products: [Product]
     campaigns: [Campaign]
     affiliates: [Affiliate]
   }
   type Affiliate {
     _id: ID!
-    type: UserType
-    firstName: String!
-    lastName: String!
-    email: String!
-    password: String!
-    avatar: String
-    website: String
-    socials: [SocialMedia]
     posts: [Post]
     looks: [Look]
-    brands: [Owner]
+    brands: [Brand]
+  }
+  type Brand {
+    _id: ID!
+    name: String!
+    website: String
+    logo: String
+    owner: Owner
+    socials: [SocialMedia]
+    affiliates: [Affiliate]
   }
   type SocialMedia {
     _id: ID!
@@ -79,6 +83,17 @@ const typeDefs = gql`
     image: String
     link: String
   }
+  type Auth {
+      token: ID!
+      owner: Owner
+      affiliate: Affiliate
+  }
+  type Query {
+      me: Owner
+  }
+  type Mutation {
+      addOwner(newOwner: ): Auth
+  } 
 `;
 
 module.exports = typeDefs;
