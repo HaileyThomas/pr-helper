@@ -15,6 +15,10 @@ const adSchema = new Schema(
       type: String,
       trim: true,
     },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
   },
   {
     toJSON: {

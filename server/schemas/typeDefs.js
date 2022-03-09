@@ -31,18 +31,18 @@ const typeDefs = gql`
     brands: [Owner]
   }
   type SocialMedia {
-      _id: ID!
-      type: MediaTypes
-      userName: String!
-      link: String!
+    _id: ID!
+    type: MediaTypes
+    userName: String!
+    link: String!
   }
   enum MediaTypes {
-      FACEBOOK
-      INSTAGRAM
-      TWITTER
-      TIKTOK
-      YOUTUBE
-      OTHER
+    FACEBOOK
+    INSTAGRAM
+    TWITTER
+    TIKTOK
+    YOUTUBE
+    OTHER
   }
   type Product {
     _id: ID!
@@ -51,6 +51,13 @@ const typeDefs = gql`
     link: String
     ads: [Ad]
     looks: [Look]
+  }
+  type Ad {
+    _id: ID!
+    title: String!
+    description: String
+    image: String
+    product: Product
   }
 `;
 
