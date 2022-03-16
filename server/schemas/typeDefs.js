@@ -82,16 +82,29 @@ const typeDefs = gql`
     image: String
     link: String
   }
+  input InputUser {
+    userId: String
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+    role: String
+    avatar: String
+    website: String
+  }
   type Auth {
-      token: ID!
-      user: User
+    token: ID!
+    user: User
   }
   type Query {
-      me: User
+    me: User
   }
   type Mutation {
-      addOwner(newOwner: ): Auth
-  } 
+    addUser(newUser: InputUser!): Auth
+    login(email: String!, password: String!): Auth
+    updateUser(userInput: InputUser!): User
+    deleteUser(password: String!): User
+  }
 `;
 
 module.exports = typeDefs;
