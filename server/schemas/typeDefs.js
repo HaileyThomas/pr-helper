@@ -98,6 +98,21 @@ const typeDefs = gql`
   }
   type Query {
     me: User
+    myBrands: [Brand]
+    brand(_id: ID!): Brand
+    owner(_id: ID!): Owner
+    affiliate(_id: ID!): Affiliate
+    mySocialMedia: [SocialMedia]
+    myProducts: [Products]
+    product(_id: ID!): Product
+    myAds: [Ad]
+    ad(_id: ID!): Ad
+    myCampaigns: [Campaign]
+    campaign(_id: ID!): Campaign
+    myPosts: [Post]
+    post(_id: ID!): Post
+    myLooks: [Look]
+    look(_id: ID!): Look
   }
   type Mutation {
     addUser(newUser: InputUser!): Auth
