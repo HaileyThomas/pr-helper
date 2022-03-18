@@ -71,5 +71,15 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // get my social media
+    mySocialMedia: async (_, __, context) => {
+      if (context.user) {
+        const { socials } = await User.findById(context.user._id)
+          .select("socials")
+          .populate("socials");
+        return socials;
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
