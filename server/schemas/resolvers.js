@@ -47,6 +47,18 @@ const resolvers = {
           .populate("affiliates")
           .populate("socials");
       }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // get owner by id
+    owner: async (_, { _id }, context) => {
+      if (context.user) {
+        const ownerData = await Owner.findById(_id);
+        if (!ownerData) {
+          throw new Error("Owner not found!");
+        }
+        return ownerData;
+      }
+      throw new AuthenticationError("Not logged in!");
     },
   },
 };
