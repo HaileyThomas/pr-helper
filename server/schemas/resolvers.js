@@ -60,5 +60,16 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // get affiliate by id
+    affiliate: async (_, { _id }, context) => {
+      if (context.user) {
+        const affiliateData = await Affiliate.findById(_id);
+        if (!affiliate) {
+          throw new Error("Affiliate not found!");
+        }
+        return affiliateData;
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
