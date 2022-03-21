@@ -101,5 +101,25 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // get ad by id
+    ad: async (_, { _id }, context) => {
+      if (context.user) {
+        const adData = await Ad.findById(_id);
+        if (!adData) {
+          throw new Error("Ad not found!");
+        }
+        const brandUsers = await Brand.findById(adData.brand).select(
+          "owner affiliates"
+        );
+        if (
+          brandUsers.owner.includes(context.user._id) ||
+          brandUsers.affiliates.includes(context.user._id)
+        ) {
+          return adData;
+        }
+        throw new AuthenticationError("Not authorized!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
