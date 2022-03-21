@@ -88,7 +88,16 @@ const resolvers = {
         if (!productData) {
           throw new Error("Product not found!");
         }
-        return productData;
+        const brandUsers = await Brand.findById(productData.brand).select(
+          "owner affiliates"
+        );
+        if (
+          brandUsers.owner.includes(context.user._id) ||
+          brandUsers.affiliates.includes(context.user._id)
+        ) {
+          return productData;
+        }
+        throw new AuthenticationError("Not authorized!");
       }
       throw new AuthenticationError("Not logged in!");
     },
