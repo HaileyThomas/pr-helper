@@ -16,6 +16,10 @@ const postSchema = new Schema(
       required: [true, "Link to post is required!"],
       trim: true,
     },
+    brand: {
+      type: Schema.Types.ObjectId,
+      ref: "Brand",
+    },
   },
   {
     toJSON: {

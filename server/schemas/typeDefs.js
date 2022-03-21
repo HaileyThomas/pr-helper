@@ -54,6 +54,7 @@ const typeDefs = gql`
     link: String
     ads: [Ad]
     looks: [Look]
+    brand: Brand
   }
   type Ad {
     _id: ID!
@@ -61,6 +62,7 @@ const typeDefs = gql`
     description: String
     image: String
     product: Product
+    brand: Brand
   }
   type Campaign {
     _id: ID!
@@ -68,12 +70,14 @@ const typeDefs = gql`
     description: String!
     image: String
     posts: [Post]
+    brand: Brand
   }
   type Post {
     _id: ID!
     title: String!
     description: String
     link: String
+    brand: Brand
   }
   type Look {
     _id: ID!
@@ -81,6 +85,7 @@ const typeDefs = gql`
     description: String
     image: String
     link: String
+    brand: Brand
   }
   input InputUser {
     userId: String
@@ -103,15 +108,10 @@ const typeDefs = gql`
     owner(_id: ID!): Owner
     affiliate(_id: ID!): Affiliate
     mySocialMedia: [SocialMedia]
-    myProducts: [Products]
     product(_id: ID!): Product
-    myAds: [Ad]
     ad(_id: ID!): Ad
-    myCampaigns: [Campaign]
     campaign(_id: ID!): Campaign
-    myPosts: [Post]
     post(_id: ID!): Post
-    myLooks: [Look]
     look(_id: ID!): Look
   }
   type Mutation {

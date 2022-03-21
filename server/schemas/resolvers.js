@@ -81,5 +81,16 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // get product by id
+    product: async (_, { _id }, context) => {
+      if (context.user) {
+        const productData = await Product.findById(_id);
+        if (!productData) {
+          throw new Error("Product not found!");
+        }
+        return productData;
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };

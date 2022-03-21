@@ -19,6 +19,10 @@ const lookSchema = new Schema(
       type: String,
       trim: true,
     },
+    brand: {
+      type: Schema.Types.ObjectId,
+      ref: "Brand",
+    },
   },
   {
     toJSON: {

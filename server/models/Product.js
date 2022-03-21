@@ -27,6 +27,10 @@ const productSchema = new Schema(
         ref: "Look",
       },
     ],
+    brand: {
+      type: Schema.Types.ObjectId,
+      ref: "Brand",
+    },
   },
   {
     toJSON: {

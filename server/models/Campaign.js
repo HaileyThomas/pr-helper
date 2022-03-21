@@ -22,6 +22,10 @@ const campaignSchema = new Schema(
         ref: "Post",
       },
     ],
+    brand: {
+      type: Schema.Types.ObjectId,
+      ref: "Brand",
+    },
   },
   {
     toJSON: {
