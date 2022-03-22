@@ -193,5 +193,13 @@ const resolvers = {
     },
   },
 
-  Mutation: {},
+  Mutation: {
+    // add user
+    addUser: async (_, { newUser }) => {
+      const user = await User.create(newUser);
+      const token = signToken(user);
+      return { token, user };
+    },
+    // login user
+  },
 };
