@@ -169,5 +169,29 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // get look by id
+    look: async (_, { _id }, context) => {
+      if (context.user) {
+        const lookData = await Look.findById(_id);
+        if (!lookData) {
+          throw new Error("Look not found!");
+        }
+        const brandUsers = await Brand.findById(lookData.brand).select(
+          "owner affiliates"
+        );
+        if (
+          brandUsers.owner.includes(context.user._id) ||
+          brandUsers.affiliates.includes(context.user._id)
+        ) {
+          return lookData;
+        }
+        throw new AuthenticationError(
+          "Not authorized to view this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
+
+  Mutation: {},
 };
