@@ -97,7 +97,9 @@ const resolvers = {
         ) {
           return productData;
         }
-        throw new AuthenticationError("Not authorized!");
+        throw new AuthenticationError(
+          "Not authorized to view this brand's data!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
@@ -117,7 +119,31 @@ const resolvers = {
         ) {
           return adData;
         }
-        throw new AuthenticationError("Not authorized!");
+        throw new AuthenticationError(
+          "Not authorized to view this brand's data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // get campaign by id
+    campaign: async (_, { _id }, context) => {
+      if (context.user) {
+        const campaignData = await Campaign.findById(_id);
+        if (!campaignData) {
+          throw new Error("Campaign not found!");
+        }
+        const brandUsers = await Brand.findById(campaignData.brand).select(
+          "owner affiliates"
+        );
+        if (
+          brandUsers.owner.includes(context.user._id) ||
+          brandUsers.affiliates.includes(context.user._id)
+        ) {
+          return campaignData;
+        }
+        throw new AuthenticationError(
+          "Not authorized to view this brand's data!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
