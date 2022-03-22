@@ -147,5 +147,27 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // get post by id
+    post: async (_, { _id }, context) => {
+      if (context.user) {
+        const postData = await Post.findById(_id);
+        if (!postData) {
+          throw new Error("Post not found!");
+        }
+        const brandUsers = await Brand.findById(postData.brand).select(
+          "owner affiliates"
+        );
+        if (
+          brandUsers.owner.includes(context.user._id) ||
+          brandUsers.affiliates.includes(context.user._id)
+        ) {
+          return postData;
+        }
+        throw new AuthenticationError(
+          "Not authorized to view this brand's data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
