@@ -295,5 +295,28 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // update brand logo
+    updateBrandLogo: async (_, { brandId, logo }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Brand.findByIdAndUpdate(
+            brandId,
+            { logo: logo },
+            { new: true, runValidators: true }
+          )
+            .populate("owner")
+            .populate("socials")
+            .populate("affiliates");
+        }
+        throw new AuthenticationError(
+          "Not authorized to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
