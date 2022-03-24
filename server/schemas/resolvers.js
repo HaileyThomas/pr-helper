@@ -44,6 +44,7 @@ const resolvers = {
           throw new Error("Brand not found!");
         }
         return await Brand.findById(_id)
+          .populate("owner")
           .populate("affiliates")
           .populate("socials");
       }
@@ -236,18 +237,40 @@ const resolvers = {
       if (context.user) {
         const newBrand = await Brand.create(brandInputs);
         // create new owner
-        
-        // add current user as brand owner
-        await newBrand.update(
-          { $addToSet: { owner: context.user._id } },
-          { new: true }
-        );
+        await Owner.create({ userId: context.user._id, brandId: newBrand._id });
+        // add brand to user
         await User.findByIdAndUpdate(context.user._id, {
           $addToSet: { brands: newBrand._id },
         });
         return await Brand.findById(newBrand._id)
-          .populate("")
+          .populate("owner")
+          .populate("socials")
+          .populate("affiliates");
       }
-    }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // update brand name
+    updateBrandName: async (_, { brandId, name }, context) => {
+      if (context.user) {
+        const brandData = await Project.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Brand.findByIdAndUpdate(
+            brandId,
+            { name: name },
+            { new: true, runValidators: true }
+          )
+            .populate("owner")
+            .populate("socials")
+            .populate("affiliates");
+        }
+        throw new AuthenticationError(
+          "Not authorized to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
