@@ -132,8 +132,6 @@ const typeDefs = gql`
     updateBrandWebsite(brandId: ID!, website: String!): Brand
     updateBrandLogo(brandId: ID!, logo: String!): Brand
     deleteBrand(brandId: ID!): Brand
-    addOwnerToBrand
-    addAffiliatesToBrand
   }
 `;
 
