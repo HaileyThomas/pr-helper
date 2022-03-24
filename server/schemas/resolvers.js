@@ -201,5 +201,35 @@ const resolvers = {
       return { token, user };
     },
     // login user
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email: email });
+      if (!user) throw new AuthenticationError("Incorrect login credentials!");
+      const correctPw = await user.isCorrectPassword(password);
+      if (!correctPw) throw new AuthenticationError("Incorrect password!");
+      const token = signToken(user);
+      return { token, user };
+    },
+    // update user
+    updateUser: async (_, { userInputs }, context) => {
+      if (context.user) {
+        return await User.findByIdAndUpdate(context.user._id, userInputs, {
+          new: true,
+          runValidators: true,
+        });
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // delete user
+    deleteUser: async (_, { password }, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+        const correctPw = await user.isCorrectPassword(password);
+        if (correctPw) {
+          return await User.findByIdAndDelete(user._id);
+        }
+        throw new AuthenticationError("Incorrect password!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
