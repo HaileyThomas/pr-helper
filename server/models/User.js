@@ -43,6 +43,12 @@ const userSchema = new Schema(
         ref: "SocialMedia",
       },
     ],
+    brands: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Brand",
+      },
+    ],
   },
   {
     toJSON: {

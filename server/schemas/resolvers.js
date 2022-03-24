@@ -231,5 +231,23 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add a new brand
+    addBrand: async (_, { brandInputs }, context) => {
+      if (context.user) {
+        const newBrand = await Brand.create(brandInputs);
+        // create new owner
+        
+        // add current user as brand owner
+        await newBrand.update(
+          { $addToSet: { owner: context.user._id } },
+          { new: true }
+        );
+        await User.findByIdAndUpdate(context.user._id, {
+          $addToSet: { brands: newBrand._id },
+        });
+        return await Brand.findById(newBrand._id)
+          .populate("")
+      }
+    }
   },
 };

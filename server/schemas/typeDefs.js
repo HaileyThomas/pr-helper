@@ -11,11 +11,12 @@ const typeDefs = gql`
     avatar: String
     website: String
     socials: [SocialMedia]
+    brands: [Brand]
   }
   type Owner {
     _id: ID!
     userId: String!
-    brand: Brand
+    brandId: String
     products: [Product]
     campaigns: [Campaign]
   }
@@ -130,9 +131,9 @@ const typeDefs = gql`
     updateBrandName(brandId: ID!, name: String!): Brand
     updateBrandWebsite(brandId: ID!, website: String!): Brand
     updateBrandLogo(brandId: ID!, logo: String!): Brand
+    deleteBrand(brandId: ID!): Brand
     addOwnerToBrand
     addAffiliatesToBrand
-    deleteBrand(brandId: ID!): Brand
   }
 `;
 
