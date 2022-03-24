@@ -318,5 +318,19 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // delete a brand
+    deleteBrand: async (_, { brandId }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Brand.findByIdAndDelete(brandId);
+        }
+        throw new AuthenticationError("Not authorized to delete this brand!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };

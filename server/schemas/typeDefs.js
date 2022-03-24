@@ -105,6 +105,14 @@ const typeDefs = gql`
     website: String
     logo: String
   }
+  input InputSocial {
+    socialId: String
+    userId: String
+    brandId: String
+    type: String
+    userName: String
+    link: String
+  }
   type Auth {
     token: ID!
     user: User
@@ -132,6 +140,9 @@ const typeDefs = gql`
     updateBrandWebsite(brandId: ID!, website: String!): Brand
     updateBrandLogo(brandId: ID!, logo: String!): Brand
     deleteBrand(brandId: ID!): Brand
+    addSocialToUser(userSocial: InputSocial!): SocialMedia
+    addSocialToBrand(brandSocial: InputSocial!): SocialMedia
+    deleteSocial(socialId: String!): SocialMedia
   }
 `;
 
