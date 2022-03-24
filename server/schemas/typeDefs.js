@@ -14,6 +14,7 @@ const typeDefs = gql`
   }
   type Owner {
     _id: ID!
+    userId: String!
     brand: Brand
     products: [Product]
     campaigns: [Campaign]
@@ -97,6 +98,12 @@ const typeDefs = gql`
     avatar: String
     website: String
   }
+  input InputBrand {
+    brandId: String
+    name: String
+    website: String
+    logo: String
+  }
   type Auth {
     token: ID!
     user: User
@@ -119,6 +126,13 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     updateUser(userInput: InputUser!): User
     deleteUser(password: String!): User
+    addBrand(brandInputs: InputBrand!): Brand
+    updateBrandName(brandId: ID!, name: String!): Brand
+    updateBrandWebsite(brandId: ID!, website: String!): Brand
+    updateBrandLogo(brandId: ID!, logo: String!): Brand
+    addOwnerToBrand
+    addAffiliatesToBrand
+    deleteBrand(brandId: ID!): Brand
   }
 `;
 
