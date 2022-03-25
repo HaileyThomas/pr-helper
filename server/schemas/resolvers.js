@@ -347,5 +347,45 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add social media to brand
+    addSocialToBrand: async (_, { brandSocial }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(brandSocial.brandId).select(
+          "owner"
+        );
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user._id)) {
+          const newSocial = await SocialMedia.create(brandSocial);
+          await newSocial.update(
+            { $addToSet: { brand: brandSocial.brandId } },
+            { new: true }
+          );
+          await Brand.findByIdAndUpdate(brandSocial.brandId, {
+            $push: { socials: newSocial._id },
+          });
+          return newSocial;
+        }
+        throw new AuthenticationError(
+          "Not authorized to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // delete social media
+    deleteSocial: async (_, { socialId, brandId }, context) => {
+      if (context.user) {
+        const socialData = await SocialMedia.findById(socialId);
+        if (
+          socialData.user.includes(context.user._id) ||
+          socialData.brand.includes(brandId)
+        ) {
+          return SocialMedia.findByIdAndDelete(socialId);
+        }
+        throw new AuthenticationError("Not authorized to delete this data!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
