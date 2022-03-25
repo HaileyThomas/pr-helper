@@ -17,6 +17,14 @@ const socialMediaSchema = new Schema({
     required: [true, "Link is required!"],
     trim: true,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  brand: {
+    type: Schema.Types.ObjectId,
+    ref: "Brand",
+  },
 });
 
 const SocialMedia = model("SocialMedia", socialMediaSchema);

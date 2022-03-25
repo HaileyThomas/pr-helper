@@ -40,6 +40,8 @@ const typeDefs = gql`
     type: MediaTypes
     userName: String!
     link: String!
+    user: User
+    brand: Brand
   }
   enum MediaTypes {
     FACEBOOK
@@ -107,11 +109,11 @@ const typeDefs = gql`
   }
   input InputSocial {
     socialId: String
-    userId: String
-    brandId: String
     type: String
     userName: String
     link: String
+    userId: String
+    brandId: String
   }
   type Auth {
     token: ID!

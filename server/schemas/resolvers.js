@@ -332,5 +332,20 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add social media to user
+    addSocialToUser: async (_, { userSocial }, context) => {
+      if (context.user) {
+        const newSocial = await SocialMedia.create(userSocial);
+        await newSocial.update(
+          { $addToSet: { user: context.user._id } },
+          { new: true }
+        );
+        await User.findByIdAndUpdate(userSocial.userId, {
+          $push: { socials: newSocial._id },
+        });
+        return newSocial;
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
