@@ -22,6 +22,7 @@ const typeDefs = gql`
   }
   type Affiliate {
     _id: ID!
+    user: String
     posts: [Post]
     looks: [Look]
     brands: [Brand]
@@ -115,6 +116,10 @@ const typeDefs = gql`
     userId: String
     brandId: String
   }
+  input InputAffiliate {
+    affiliateId: String
+    userId: String
+  }
   type Auth {
     token: ID!
     user: User
@@ -141,10 +146,17 @@ const typeDefs = gql`
     updateBrandName(brandId: ID!, name: String!): Brand
     updateBrandWebsite(brandId: ID!, website: String!): Brand
     updateBrandLogo(brandId: ID!, logo: String!): Brand
+    addAffiliateToBrand(brandId: ID!, affiliateInputs: InputAffiliate!): Brand
+    deleteAffiliateFromBrand(
+      brandId: ID!
+      affiliateInputs: InputAffiliate!
+    ): Brand
     deleteBrand(brandId: ID!): Brand
     addSocialToUser(userSocial: InputSocial!): SocialMedia
     addSocialToBrand(brandSocial: InputSocial!): SocialMedia
     deleteSocial(socialId: String!): SocialMedia
+    addAffiliateProfile(newAffiliate: InputAffiliate!): Affiliate
+    deleteAffiliateProfile(affiliateId: ID!): Affiliate
   }
 `;
 

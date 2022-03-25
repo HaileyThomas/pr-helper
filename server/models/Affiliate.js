@@ -1,6 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const affiliateSchema = new Schema({
+  user: {
+    type: String,
+    trim: true,
+  },
   posts: [
     {
       type: Schema.Types.ObjectId,
