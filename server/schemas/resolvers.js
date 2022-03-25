@@ -318,6 +318,57 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add an affiliate to brand
+    addAffiliateToBrand: async (_, { brandId, affiliateInputs }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          await Affiliate.findByIdAndUpdate(
+            affiliateInputs.affiliateId,
+            { $addToSet: { brands: brandId } },
+            { new: true, runValidators: true }
+          )
+            .populate("looks")
+            .populate("posts")
+            .populate("brands");
+
+          return await Brand.findByIdAndUpdate(
+            brandId,
+            { $addToSet: { affiliates: affiliateInputs.affiliateId } },
+            { new: true, runValidators: true }
+          )
+            .populate("socials")
+            .populate("affiliates");
+        }
+        throw new AuthenticationError("Not authorized to add an affiliate!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // delete affiliate from brand
+    deleteAffiliateFromBrand: async (_, { brandId, affiliateInputs }) => {
+      // TODO delete affiliate from both affiliate data and brand data
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          await Affiliate.findByIdAndUpdate(affiliateInputs.affiliateId, {
+            $pull: { brands: brandId },
+          });
+          return await Brand.findByIdAndUpdate(brandId, {
+            $pull: { affiliates: affiliateInputs.affiliateId },
+          })
+            .populate("socials")
+            .populate("affiliates");
+        }
+        throw new AuthenticationError("Not authorized to delete an affiliate!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
     // delete a brand
     deleteBrand: async (_, { brandId }, context) => {
       if (context.user) {
@@ -387,5 +438,7 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add an affiliate profile
+    addAffiliateProfile: async(_),
   },
 };
