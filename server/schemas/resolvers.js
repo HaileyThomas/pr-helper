@@ -480,10 +480,52 @@ const resolvers = {
       throw new AuthenticationError("Not logged in!");
     },
     // update product name
-    updateProductName: async (_, { productInputs }, context) => {
+    updateProductName: async (_, { productId, name, brandId }, context) => {
       if (context.user) {
-
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Product.findByIdAndUpdate(
+            productId,
+            { name: name },
+            { new: true, runValidators: true }
+          )
+            .populate("ads")
+            .populate("looks");
+        }
+        throw new AuthenticationError(
+          "Not authorized to change this products data!"
+        );
       }
-    }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // update product description
+    updateProductDescription: async (
+      _,
+      { productId, description, brandId },
+      context
+    ) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Product.findByIdAndUpdate(
+            productId,
+            { description: description },
+            { new: true, runValidators: true }
+          )
+            .populate("ads")
+            .populate("looks");
+        }
+        throw new AuthenticationError(
+          "Not Authorized to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
