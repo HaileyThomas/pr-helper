@@ -165,8 +165,18 @@ const typeDefs = gql`
     addAffiliateProfile(newAffiliate: InputAffiliate!): Affiliate
     deleteAffiliateProfile(affiliateId: ID!): Affiliate
     addProduct(productInputs: InputProduct!): Product
-    updateProduct(productInputs: InputProduct!): Product
-    deleteProduct(productId: ID!): Product
+    updateProductName(productId: ID!, name: String!, brandId: String): Product
+    updateProductDescription(
+      productId: ID!
+      description: String!
+      brandId: String
+    ): Product
+    updateProductLink(
+      productId: ID!
+      description: String!
+      brandId: String
+    ): Product
+    deleteProduct(productId: ID!, brandId: String): Product
   }
 `;
 

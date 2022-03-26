@@ -479,5 +479,11 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // update product name
+    updateProductName: async (_, { productInputs }, context) => {
+      if (context.user) {
+
+      }
+    }
   },
 };
