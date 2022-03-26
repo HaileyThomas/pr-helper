@@ -120,6 +120,13 @@ const typeDefs = gql`
     affiliateId: String
     userId: String
   }
+  input InputProduct {
+    productId: String
+    name: String
+    description: String
+    link: String
+    brandId: String
+  }
   type Auth {
     token: ID!
     user: User
