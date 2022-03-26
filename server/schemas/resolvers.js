@@ -439,6 +439,21 @@ const resolvers = {
       throw new AuthenticationError("Not logged in!");
     },
     // add an affiliate profile
-    addAffiliateProfile: async(_),
+    addAffiliateProfile: async (_, __, context) => {
+      if (context.user) {
+        return Affiliate.create({
+          affiliateId: _id,
+          userId: context.user._id,
+        });
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // delete affiliate profile
+    deleteAffiliateProfile: async (_, { affiliateId }, context) => {
+      if (context.user) {
+        return await Affiliate.findByIdAndDelete(affiliateId);
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
