@@ -164,8 +164,8 @@ const typeDefs = gql`
     deleteSocial(socialId: String!): SocialMedia
     addAffiliateProfile(newAffiliate: InputAffiliate!): Affiliate
     deleteAffiliateProfile(affiliateId: ID!): Affiliate
-    addProduct(newProduct: InputProduct!): Product
-    updateProduct(productData: InputProduct!): Product
+    addProduct(productInputs: InputProduct!): Product
+    updateProduct(productInputs: InputProduct!): Product
     deleteProduct(productId: ID!): Product
   }
 `;

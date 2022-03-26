@@ -455,5 +455,29 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add product
+    addProduct: async (_, { productInputs }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(productInputs.brandId).select(
+          "owner"
+        );
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          const newProduct = await Product.create(productInputs);
+
+          await Owner.findByIdAndUpdate(
+            brandData.owner._id,
+            { $addToSet: { products: newProduct._id } },
+            { new: true }
+          );
+
+          return newProduct.populate("ads").populate("looks");
+        }
+        throw new AuthenticationError("Not authorized to add a product!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
