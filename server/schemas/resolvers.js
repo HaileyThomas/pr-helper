@@ -658,5 +658,20 @@ const resolvers = {
       throw new AuthenticationError("Not logged in!");
     },
     // delete ad
+    deleteAd: async (_, { adId, brandId }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(brandId);
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user._id)) {
+          return Ad.findByIdAndDelete(adId);
+        }
+        throw new AuthenticationError(
+          "Must be the brands owner to delete an ad!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
