@@ -637,5 +637,26 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // update ad image
+    updateAdImage: async (_, { adId, image, brandId }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(brandId).select("owner");
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user._id)) {
+          return await Ad.findByIdAndUpdate(
+            adId,
+            { image: image },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError(
+          "Must be the brand owner to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // delete ad
   },
 };
