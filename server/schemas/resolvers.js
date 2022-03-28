@@ -563,5 +563,28 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add an ad to a product
+    addAd: async (_, { adInputs }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(adInputs.brandId).select(
+          "owner"
+        );
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user._id)) {
+          const newAd = await Ad.create({
+            ...adInputs,
+            product: taskInputs.productId,
+          });
+          await Product.findByIdAndUpdate(adInputs.productId, {
+            $push: { ads: newAd._id },
+          });
+          return newAd;
+        }
+        throw new AuthenticationError("Not authorized to add an Ad!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
