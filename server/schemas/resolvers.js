@@ -267,7 +267,7 @@ const resolvers = {
             .populate("affiliates");
         }
         throw new AuthenticationError(
-          "Not authorized to change this brands data!"
+          "Must be the brand owner to change this brands data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -290,7 +290,7 @@ const resolvers = {
             .populate("affiliates");
         }
         throw new AuthenticationError(
-          "Not authorized to change this brands data!"
+          "Must be the brand owner to change this brands data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -313,7 +313,7 @@ const resolvers = {
             .populate("affiliates");
         }
         throw new AuthenticationError(
-          "Not authorized to change this brands data!"
+          "Must be the brand owner to change this brands data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -343,7 +343,9 @@ const resolvers = {
             .populate("socials")
             .populate("affiliates");
         }
-        throw new AuthenticationError("Not authorized to add an affiliate!");
+        throw new AuthenticationError(
+          "Must be the brand owner to add an affiliate!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
@@ -365,7 +367,9 @@ const resolvers = {
             .populate("socials")
             .populate("affiliates");
         }
-        throw new AuthenticationError("Not authorized to delete an affiliate!");
+        throw new AuthenticationError(
+          "Must be the brand owner to delete an affiliate!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
@@ -379,7 +383,9 @@ const resolvers = {
         if (brandData.owner.includes(context.user._id)) {
           return await Brand.findByIdAndDelete(brandId);
         }
-        throw new AuthenticationError("Not authorized to delete this brand!");
+        throw new AuthenticationError(
+          "Must be the brand owner to delete this brand!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
@@ -419,7 +425,7 @@ const resolvers = {
           return newSocial;
         }
         throw new AuthenticationError(
-          "Not authorized to change this brands data!"
+          "Must be the brand owner to change this brands data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -475,7 +481,9 @@ const resolvers = {
 
           return newProduct.populate("ads").populate("looks");
         }
-        throw new AuthenticationError("Not authorized to add a product!");
+        throw new AuthenticationError(
+          "Must be the brand owner to add a product!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
@@ -496,7 +504,7 @@ const resolvers = {
             .populate("looks");
         }
         throw new AuthenticationError(
-          "Not authorized to change this products data!"
+          "Must be the brand owner to change this products data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -522,7 +530,7 @@ const resolvers = {
             .populate("looks");
         }
         throw new AuthenticationError(
-          "Not Authorized to change this brands data!"
+          "Must be the brand owner to change this brands data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -544,7 +552,7 @@ const resolvers = {
             .populate("looks");
         }
         throw new AuthenticationError(
-          "Not authorized to change this products data!"
+          "Must be the brand owner to change this products data!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -559,7 +567,9 @@ const resolvers = {
         if (brandData.owner.includes(context.user._id)) {
           return await Product.findByIdAndDelete(productId);
         }
-        throw new AuthenticationError("Not authorized to delete a product!");
+        throw new AuthenticationError(
+          "Must be the brand owner to delete a product!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
@@ -576,13 +586,54 @@ const resolvers = {
           const newAd = await Ad.create({
             ...adInputs,
             product: taskInputs.productId,
+            brand: adInputs.brandId,
           });
           await Product.findByIdAndUpdate(adInputs.productId, {
             $push: { ads: newAd._id },
           });
           return newAd;
         }
-        throw new AuthenticationError("Not authorized to add an Ad!");
+        throw new AuthenticationError("Must be the brand owner to add an Ad!");
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // update ad title
+    updateAdTitle: async (_, { adId, title, brandId }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(brandId).select("owner");
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user_id)) {
+          return Ad.findByIdAndUpdate(
+            adId,
+            { title: title },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError(
+          "Must be the brand owner to update brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // update ad description
+    updateAdDescription: async (_, { adId, description, brandId }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(brandId).select("owner");
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user._id)) {
+          return await Ad.findByIdAndUpdate(
+            adId,
+            { description: description },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError(
+          "Must be brand owner to change this brands data!"
+        );
       }
       throw new AuthenticationError("Not logged in!");
     },
