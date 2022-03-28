@@ -127,6 +127,14 @@ const typeDefs = gql`
     link: String
     brandId: String
   }
+  input InputAd {
+    adId: String
+    title: String!
+    description: String
+    image: String
+    productId: String
+    brandId: String
+  }
   type Auth {
     token: ID!
     user: User
@@ -177,6 +185,11 @@ const typeDefs = gql`
       brandId: String
     ): Product
     deleteProduct(productId: ID!, brandId: String): Product
+    addAd(adInputs: InputAd!): Ad
+    updateAdTitle(adId: ID!, title: String!, brandId: String): Ad
+    updateAdDescription(adId: ID!, description: String!, brandId: String): Ad
+    updateAdImage(adId: ID!, image: String!, brandId: String): Ad
+    deleteAd(adId: ID!, brandId: String): Ad
   }
 `;
 
