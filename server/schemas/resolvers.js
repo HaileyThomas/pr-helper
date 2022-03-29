@@ -788,5 +788,21 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // delete a campaign
+    deleteCampaign: async (_, { campaignId, brandId }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Campaign.findByIdAndDelete(campaignId);
+        }
+        throw new AuthenticationError(
+          "Must be the brands owner to delete a campaign!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
