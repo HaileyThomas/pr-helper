@@ -129,10 +129,17 @@ const typeDefs = gql`
   }
   input InputAd {
     adId: String
-    title: String!
+    title: String
     description: String
     image: String
     productId: String
+    brandId: String
+  }
+  input InputCampaign {
+    campaignId: String
+    title: String
+    description: String
+    image: String
     brandId: String
   }
   type Auth {
@@ -190,6 +197,23 @@ const typeDefs = gql`
     updateAdDescription(adId: ID!, description: String!, brandId: String): Ad
     updateAdImage(adId: ID!, image: String!, brandId: String): Ad
     deleteAd(adId: ID!, brandId: String): Ad
+    addCampaign(campaignInputs: InputCampaign!): Campaign
+    updateCampaignTitle(
+      campaignId: ID!
+      title: String!
+      brandId: String
+    ): Campaign
+    updateCampaignDescription(
+      campaignId: ID!
+      description: String!
+      brandID: String
+    ): Campaign
+    updateCampaignImage(
+      campaignId: ID!
+      image: String!
+      brandId: String
+    ): Campaign
+    deleteCampaign(campaignId: ID!, brandId: String): Campaign
   }
 `;
 
