@@ -673,5 +673,30 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add a campaign
+    addCampaign: async (_, { campaignInputs }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(campaignInputs.brandId).select(
+          "owner"
+        );
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          const newCampaign = await Campaign.create({
+            ...campaignInputs,
+            brand: campaignInputs.brandId,
+          });
+          await Owner.findByIdAndUpdate(brandData.owner, {
+            $push: { campaigns: newCampaign._id },
+          });
+          return newCampaign;
+        }
+        throw new AuthenticationError(
+          "Must be brand owner to create a campaign!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
