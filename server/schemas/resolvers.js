@@ -698,5 +698,49 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // update campaign title
+    updateCampaignTitle: async (_, { campaignId, title, brandId }, context) => {
+      if (context.user) {
+        const brandUsers = await brand.findById(brandId).select("owner");
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.owner.includes(context.user._id)) {
+          return await Campaign.findByIdAndUpdate(
+            campaignId,
+            { title: title },
+            { new: true, runValidators: true }
+          ).populate("posts");
+        }
+        throw new AuthenticationError(
+          "Must be the brand owner to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // update campaign description
+    updateCampaignDescription: async (
+      _,
+      { campaignId, description, brandId },
+      context
+    ) => {
+      if (context.user) {
+        const brandData = await brand.findById(brandId).select("owner");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.owner.includes(context.user._id)) {
+          return await Campaign.findByIdAndUpdate(
+            campaignId,
+            { description: description },
+            { new: true, runValidators: true }
+          ).populate("posts");
+        }
+        throw new AuthenticationError(
+          "Must be the brands owner to change this brands data!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
