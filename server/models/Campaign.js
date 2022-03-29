@@ -16,6 +16,10 @@ const campaignSchema = new Schema(
       type: String,
       trim: true,
     },
+    length: {
+      type: Number,
+      trim: true,
+    },
     posts: [
       {
         type: Schema.Types.ObjectId,

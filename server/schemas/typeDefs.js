@@ -74,6 +74,7 @@ const typeDefs = gql`
     title: String!
     description: String!
     image: String
+    length: Int
     posts: [Post]
     brand: Brand
   }
@@ -140,6 +141,7 @@ const typeDefs = gql`
     title: String
     description: String
     image: String
+    length: Int
     brandId: String
   }
   type Auth {
@@ -211,6 +213,11 @@ const typeDefs = gql`
     updateCampaignImage(
       campaignId: ID!
       image: String!
+      brandId: String
+    ): Campaign
+    updateCampaignLength(
+      campaignId: ID!
+      length: Int!
       brandId: String
     ): Campaign
     deleteCampaign(campaignId: ID!, brandId: String): Campaign
