@@ -609,7 +609,7 @@ const resolvers = {
             adId,
             { title: title },
             { new: true, runValidators: true }
-          );
+          ).populate("posts");
         }
         throw new AuthenticationError(
           "Must be the brand owner to update brands data!"
@@ -629,7 +629,7 @@ const resolvers = {
             adId,
             { description: description },
             { new: true, runValidators: true }
-          );
+          ).populate("posts");
         }
         throw new AuthenticationError(
           "Must be brand owner to change this brands data!"
@@ -649,7 +649,7 @@ const resolvers = {
             adId,
             { image: image },
             { new: true, runValidators: true }
-          );
+          ).populate("posts");
         }
         throw new AuthenticationError(
           "Must be the brand owner to change this brands data!"

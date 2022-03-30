@@ -68,6 +68,7 @@ const typeDefs = gql`
     image: String
     product: Product
     brand: Brand
+    posts: [Post]
   }
   type Campaign {
     _id: ID!
