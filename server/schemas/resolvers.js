@@ -804,5 +804,25 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add a post
+    addPost: async (_, { postInputs }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(postInputs.brandId).select(
+          "affiliates"
+        );
+        if (!brandUsers) {
+          throw new Error("Brand not found!");
+        }
+        if (brandUsers.affiliates.includes(context.user._id)) {
+          const newPost = await Post.create({
+            ...postInputs,
+            brand: postInputs.brandId,
+            postedBy: context.user._id,
+          });
+          // TODO: figure out searching up affiliate
+          await Affiliate;
+        }
+      }
+    },
   },
 };

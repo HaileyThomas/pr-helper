@@ -22,7 +22,7 @@ const typeDefs = gql`
   }
   type Affiliate {
     _id: ID!
-    user: String
+    userId: String
     posts: [Post]
     looks: [Look]
     brands: [Brand]
@@ -85,6 +85,7 @@ const typeDefs = gql`
     description: String
     link: String
     brand: Brand
+    postedBy: User
   }
   type Look {
     _id: ID!
@@ -151,6 +152,7 @@ const typeDefs = gql`
     description: String
     link: String
     brandId: String
+    postedBy: String
   }
   type Auth {
     token: ID!

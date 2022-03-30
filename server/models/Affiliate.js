@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const affiliateSchema = new Schema({
-  user: {
+  userId: {
     type: String,
     trim: true,
   },
