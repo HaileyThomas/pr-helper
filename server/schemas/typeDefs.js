@@ -144,6 +144,13 @@ const typeDefs = gql`
     length: Int
     brandId: String
   }
+  input InputPost {
+    postId: String
+    title: String
+    description: String
+    link: String
+    brandId: String
+  }
   type Auth {
     token: ID!
     user: User
@@ -221,6 +228,15 @@ const typeDefs = gql`
       brandId: String
     ): Campaign
     deleteCampaign(campaignId: ID!, brandId: String): Campaign
+    addPost(postInputs: InputPost!): Post
+    updatePostTitle(postId: ID!, title: String!, brandId: String): Post
+    updatePostDescription(
+      postId: ID!
+      description: String!
+      brandId: String
+    ): Post
+    updatePostLink(postId: ID!, link: String!, brandId: String): Post
+    deletePost(postId: ID!, brandId: String!): Post
   }
 `;
 
