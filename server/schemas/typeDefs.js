@@ -209,6 +209,7 @@ const typeDefs = gql`
     updateAdDescription(adId: ID!, description: String!, brandId: String): Ad
     updateAdImage(adId: ID!, image: String!, brandId: String): Ad
     deleteAd(adId: ID!, brandId: String): Ad
+    addPostToAd(adId: ID!, brandId: String, postId: String): Ad
     addCampaign(campaignInputs: InputCampaign!): Campaign
     updateCampaignTitle(
       campaignId: ID!
@@ -231,6 +232,11 @@ const typeDefs = gql`
       brandId: String
     ): Campaign
     deleteCampaign(campaignId: ID!, brandId: String): Campaign
+    addPostToCampaign(
+      campaignId: ID!
+      brandId: String
+      postId: String
+    ): Campaign
     addPost(postInputs: InputPost!): Post
     updatePostTitle(postId: ID!, title: String!, brandId: String): Post
     updatePostDescription(
