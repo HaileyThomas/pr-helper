@@ -850,5 +850,29 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // update post description
+    updatePostDescription: async (
+      _,
+      { postId, description, brandId },
+      context
+    ) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("affiliates");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.affiliates.includes(context.user._id)) {
+          return await Post.findByIdAndUpdate(
+            postId,
+            { description: description },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError(
+          "Must be an affiliate of this brand to update a post!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
