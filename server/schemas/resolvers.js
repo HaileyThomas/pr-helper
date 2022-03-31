@@ -819,10 +819,16 @@ const resolvers = {
             brand: postInputs.brandId,
             postedBy: context.user._id,
           });
-          // TODO: figure out searching up affiliate
-          await Affiliate;
+          const filter = { userId: postInputs.postedBy };
+          const update = { $push: { posts: newPost._id } };
+          await Affiliate.findOneAndUpdate(filter, update);
+          return newPost;
         }
+        throw new AuthenticationError(
+          "Must be an affiliate of this brand to create a post!"
+        );
       }
+      throw new AuthenticationError("Not logged in!");
     },
   },
 };
