@@ -833,11 +833,16 @@ const resolvers = {
     // update post title
     updatePostTitle: async (_, { postId, title, brandId }, context) => {
       if (context.user) {
-        const brandData = await brand.findById(brandId).select("affiliates");
+        const brandData = await brand
+          .findById(brandId)
+          .select("owner affiliates");
         if (!brandData) {
           throw new Error("Brand not found!");
         }
-        if (brandData.affiliates.includes(context.user._id)) {
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
           return await Post.findByIdAndUpdate(
             postId,
             { title: title },
@@ -845,7 +850,7 @@ const resolvers = {
           );
         }
         throw new AuthenticationError(
-          "Must be an affiliate of this brand to update a post!"
+          "Must be the owner or an affiliate of this brand to update a post!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -857,11 +862,16 @@ const resolvers = {
       context
     ) => {
       if (context.user) {
-        const brandData = await Brand.findById(brandId).select("affiliates");
+        const brandData = await Brand.findById(brandId).select(
+          "owner affiliates"
+        );
         if (!brandData) {
           throw new Error("Brand not found!");
         }
-        if (brandData.affiliates.includes(context.user._id)) {
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
           return await Post.findByIdAndUpdate(
             postId,
             { description: description },
@@ -869,7 +879,7 @@ const resolvers = {
           );
         }
         throw new AuthenticationError(
-          "Must be an affiliate of this brand to update a post!"
+          "Must be the owner or an affiliate of this brand to update a post!"
         );
       }
       throw new AuthenticationError("Not logged in!");
@@ -877,11 +887,16 @@ const resolvers = {
     // update post link
     updatePostLink: async (_, { postId, link, brandId }, context) => {
       if (context.user) {
-        const brandData = await Brand.findById(brandId).select("affiliates");
+        const brandData = await Brand.findById(brandId).select(
+          "owner affiliates"
+        );
         if (!brandData) {
           throw new Error("Brand not found!");
         }
-        if (brandData.affiliates.includes(context.user._id)) {
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
           return await Post.findByIdAndUpdate(
             postId,
             { link: link },
@@ -889,7 +904,28 @@ const resolvers = {
           );
         }
         throw new AuthenticationError(
-          "Must be an affiliate of this brand to update a post!"
+          "Must be the owner or an affiliate of this brand to update a post!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
+    // delete a post
+    deletePost: async (_, { postId, brandId }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select(
+          "owner affiliates"
+        );
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
+          return await Post.findByIdAndDelete(postId);
+        }
+        throw new AuthenticationError(
+          "Must be the owner or an affiliate of this brand to delete a post!"
         );
       }
       throw new AuthenticationError("Not logged in!");
