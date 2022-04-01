@@ -94,6 +94,7 @@ const typeDefs = gql`
     image: String
     link: String
     brand: Brand
+    postedBy: User
   }
   input InputUser {
     userId: String
@@ -150,6 +151,15 @@ const typeDefs = gql`
     postId: String
     title: String
     description: String
+    link: String
+    brandId: String
+    postedBy: String
+  }
+  input InputLook {
+    lookId: ID!
+    title: String!
+    description: String
+    image: String
     link: String
     brandId: String
     postedBy: String
@@ -246,6 +256,12 @@ const typeDefs = gql`
     ): Post
     updatePostLink(postId: ID!, link: String!, brandId: String): Post
     deletePost(postId: ID!, brandId: String!): Post
+    addLook(lookInputs: InputLook!): Look
+    updateLookTitle(): Look
+    updateLookDescription(): Look
+    updateLookImage(): Look
+    updateLookLink(): Look
+    deleteLook(): Look
   }
 `;
 

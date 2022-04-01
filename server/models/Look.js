@@ -23,6 +23,10 @@ const lookSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Brand",
     },
+    postedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     toJSON: {
