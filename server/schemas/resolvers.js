@@ -673,6 +673,31 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add a post to an ad
+    addPostToAd: async (_, { adId, brandId, postId }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select(
+          "owner affiliates"
+        );
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
+          return await Ad.findByIdAndUpdate(
+            adId,
+            { $addToSet: { posts: postId } },
+            { new: true, runValidators: true }
+          ).populate("posts");
+        }
+        throw new AuthenticationError(
+          "Must be the brand owner or and affiliate of this brand to add a post to an ad!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
     // add a campaign
     addCampaign: async (_, { campaignInputs }, context) => {
       if (context.user) {
