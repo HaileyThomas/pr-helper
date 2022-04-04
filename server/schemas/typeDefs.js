@@ -214,6 +214,7 @@ const typeDefs = gql`
       brandId: String
     ): Product
     deleteProduct(productId: ID!, brandId: String): Product
+    addLookToProduct(productId: ID!, brandId: String, lookId: String): Product
     addAd(adInputs: InputAd!): Ad
     updateAdTitle(adId: ID!, title: String!, brandId: String): Ad
     updateAdDescription(adId: ID!, description: String!, brandId: String): Ad
