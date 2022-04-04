@@ -980,5 +980,28 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add a look
+    addLook: async (_, { lookInputs }, context) => {
+      if (context.user) {
+        const brandUsers = await Brand.findById(lookInputs.brandId).select(
+          "affiliates"
+        );
+        if (brandUsers.affiliates.includes(context.user._id)) {
+          const newLook = await Look.create({
+            ...taskInputs,
+            brand: lookInputs.brandId,
+            postedBy: context.user._id,
+          });
+          const filter = { userId: lookInputs.postedBy };
+          const update = { $push: { looks: newLook._id } };
+          await Affiliate.findOneAndUpdate(filter, update);
+          return newLook;
+        }
+        throw new AuthenticationError(
+          "Must be an affiliate of this brand to add a look!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
