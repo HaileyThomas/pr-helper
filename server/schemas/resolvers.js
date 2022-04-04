@@ -1088,5 +1088,26 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // delete a look
+    deleteLook: async (_, { lookId, brandId }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select(
+          "owner affiliates"
+        );
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
+          return await Look.findByIdAndDelete(lookId);
+        }
+        throw new AuthenticationError(
+          "Must be the brand owner or an affiliate of this brand to delete a  look!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
