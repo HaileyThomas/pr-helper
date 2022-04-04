@@ -257,11 +257,15 @@ const typeDefs = gql`
     updatePostLink(postId: ID!, link: String!, brandId: String): Post
     deletePost(postId: ID!, brandId: String!): Post
     addLook(lookInputs: InputLook!): Look
-    updateLookTitle(): Look
-    updateLookDescription(): Look
-    updateLookImage(): Look
-    updateLookLink(): Look
-    deleteLook(): Look
+    updateLookTitle(lookId: ID!, title: String!, brandId: String): Look
+    updateLookDescription(
+      lookId: ID!
+      description: String!
+      brandId: String
+    ): Look
+    updateLookImage(lookId: ID!, image: String!, brandId: String): Look
+    updateLookLink(lookId: ID!, link: String!, brandId: String): Look
+    deleteLook(lookId: ID!, brandId: String!): Look
   }
 `;
 
