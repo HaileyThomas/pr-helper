@@ -1024,5 +1024,29 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // update look description
+    updateLookDescription: async (
+      _,
+      { lookId, description, brandId },
+      context
+    ) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select("affiliates");
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (brandData.affiliates.includes(context.user._id)) {
+          return await Look.findByIdAndUpdate(
+            lookId,
+            { description: description },
+            { new: true, runValidators: true }
+          );
+        }
+        throw new AuthenticationError(
+          "Must be a brand affiliate to update this looks description!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
   },
 };
