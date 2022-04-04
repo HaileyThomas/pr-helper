@@ -573,6 +573,33 @@ const resolvers = {
       }
       throw new AuthenticationError("Not logged in!");
     },
+    // add look to a product
+    addLookToProduct: async (_, { productId, brandId, lookId }, context) => {
+      if (context.user) {
+        const brandData = await Brand.findById(brandId).select(
+          "owner affiliates"
+        );
+        if (!brandData) {
+          throw new Error("Brand not found!");
+        }
+        if (
+          brandData.owner.includes(context.user._id) ||
+          brandData.affiliates.includes(context.user._id)
+        ) {
+          return await Product.findByIdAndUpdate(
+            productId,
+            { $addToSet: { looks: lookId } },
+            { new: true, runValidators: true }
+          )
+            .populate("ads")
+            .populate("looks");
+        }
+        throw new AuthenticationError(
+          "Must be the brand owner or an affiliate of this brand to add a look to a product!"
+        );
+      }
+      throw new AuthenticationError("Not logged in!");
+    },
     // add an ad to a product
     addAd: async (_, { adInputs }, context) => {
       if (context.user) {
