@@ -65,7 +65,7 @@ const resolvers = {
     affiliate: async (_, { _id }, context) => {
       if (context.user) {
         const affiliateData = await Affiliate.findById(_id);
-        if (!affiliate) {
+        if (!affiliateData) {
           throw new Error("Affiliate not found!");
         }
         return affiliateData;
@@ -1138,3 +1138,5 @@ const resolvers = {
     },
   },
 };
+
+module.exports = resolvers;
