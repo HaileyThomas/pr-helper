@@ -610,8 +610,7 @@ const resolvers = {
           throw new Error("Brand not found!");
         }
         if (brandUsers.owner.includes(context.user._id)) {
-          const newAd = await Ad.create({
-            ...adInputs,
+          const newAd = await Ad.create(...adInputs, {
             product: taskInputs.productId,
             brand: adInputs.brandId,
           });
@@ -735,8 +734,7 @@ const resolvers = {
           throw new Error("Brand not found!");
         }
         if (brandData.owner.includes(context.user._id)) {
-          const newCampaign = await Campaign.create({
-            ...campaignInputs,
+          const newCampaign = await Campaign.create(...campaignInputs, {
             brand: campaignInputs.brandId,
           });
           await Owner.findByIdAndUpdate(brandData.owner, {
@@ -891,8 +889,7 @@ const resolvers = {
           throw new Error("Brand not found!");
         }
         if (brandUsers.affiliates.includes(context.user._id)) {
-          const newPost = await Post.create({
-            ...postInputs,
+          const newPost = await Post.create(...postInputs, {
             brand: postInputs.brandId,
             postedBy: context.user._id,
           });
@@ -1014,8 +1011,7 @@ const resolvers = {
           "affiliates"
         );
         if (brandUsers.affiliates.includes(context.user._id)) {
-          const newLook = await Look.create({
-            ...taskInputs,
+          const newLook = await Look.create(...taskInputs, {
             brand: lookInputs.brandId,
             postedBy: context.user._id,
           });
