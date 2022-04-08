@@ -19,7 +19,7 @@ const affiliateSchema = new Schema({
   ],
   brands: [
     {
-      type: SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Brand",
     },
   ],

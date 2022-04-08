@@ -54,8 +54,7 @@ const userSchema = new Schema(
     toJSON: {
       virtuals: true,
     },
-  },
-  options
+  }
 );
 
 // middleware for password
