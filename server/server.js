@@ -26,13 +26,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // serve up static assets
-if (process.env.NODE_ENV === "production") {
+/* if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 }
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
-});
+}); */
 
 // listen for server to be running
 db.once("open", () => {
