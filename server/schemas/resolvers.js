@@ -251,9 +251,10 @@ const resolvers = {
       throw new AuthenticationError("Not logged in!");
     },
     // update brand name
+    // TODO: includes is undefined
     updateBrandName: async (_, { brandId, name }, context) => {
       if (context.user) {
-        const brandData = await Project.findById(brandId).select("owner");
+        const brandData = await Brand.findById(brandId).select("owner");
         if (!brandData) {
           throw new Error("Brand not found!");
         }
