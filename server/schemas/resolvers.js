@@ -211,9 +211,10 @@ const resolvers = {
       return { token, user };
     },
     // update user
+    // TODO: not working
     updateUser: async (_, { userInputs }, context) => {
       if (context.user) {
-        return await User.findByIdAndUpdate(context.user._id, userInputs, {
+        return await User.findByIdAndUpdate(userInputs.userId, userInputs, {
           new: true,
           runValidators: true,
         });
